@@ -2,6 +2,7 @@ import csv
 from peewee import chunked
 from app.database import db
 from io import StringIO
+from typing import IO
 
 from app.models.product import Product
 

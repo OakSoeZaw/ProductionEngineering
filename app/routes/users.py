@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
 
 from app.models.user import User
@@ -6,7 +6,7 @@ from app.services.csv_import import import_users_from_file
 
 users_bp = Blueprint("users", __name__)
 
-@users_bp.route("/users")
+@users_bp.route("/users", methods = ["GET"])
 def list_users():
     users = User.select()
     return jsonify([model_to_dict(u) for u in users])
