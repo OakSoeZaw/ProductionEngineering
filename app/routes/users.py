@@ -27,3 +27,10 @@ def post_users():
         return jsonify({"imported": imported}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@users_bp.route("/users/<id>", methods=["GET"])
+def getUserByID(id: int):
+    user = User.get_or_none(User.id == id)
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(model_to_dict(user))
