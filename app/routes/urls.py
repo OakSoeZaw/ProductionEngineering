@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
+from peewee import DoesNotExist
+from datetime import datetime
 
 from app.models.url import Url
 from app.models.user import User
@@ -52,3 +54,45 @@ def getUrl():
         "updated_at": url.updated_at.isoformat(),
     } for url in urls]), 201
 
+@urls_bp.route("/urls/<id>", methods=["GET"])
+def getUrlById(id : int):
+    url = Url.get_by_id(id)
+    if not url:
+        return jsonify({"error": "Id not found"}), 400
+    return jsonify({
+        "id": url.id,
+        "user_id": url.user.id,
+        "short_code": url.short_code,
+        "original_url": url.original_url,
+        "title": url.title,
+        "is_active": url.is_active,
+        "created_at": url.created_at.isoformat(),
+        "updated_at": url.updated_at.isoformat(),
+    } ), 200
+
+@urls_bp.route("/urls/<id>", methods =["PUT"])
+def updateUrl(id: int):
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data found "}), 400
+    title = data.get("title")
+    is_active = data.get("is_active")
+    try:
+        url = Url.get_by_id(id)
+    except DoesNotExist :
+        return jsonify({"error": "Url not found"}), 404
+    url.title = title
+    url.is_active = is_active
+    url.updated_at = datetime.now()
+    url.save()
+
+    return jsonify({
+        "id": url.id,
+        "user_id": url.user.id,
+        "short_code": url.short_code,
+        "original_url": url.original_url,
+        "title": url.title,
+        "is_active": url.is_active,
+        "created_at": url.created_at.isoformat(),
+        "updated_at": url.updated_at.isoformat(),
+    }), 201
