@@ -37,3 +37,18 @@ def postUrl():
         "created_at": url.created_at.isoformat(),
         "updated_at": url.updated_at.isoformat(),
     }), 201
+
+@urls_bp.route("/urls", methods=["GET"])
+def getUrl():
+    urls = Url.select()
+    return jsonify([{
+        "id": url.id,
+        "user_id": url.user.id,
+        "short_code": url.short_code,
+        "original_url": url.original_url,
+        "title": url.title,
+        "is_active": url.is_active,
+        "created_at": url.created_at.isoformat(),
+        "updated_at": url.updated_at.isoformat(),
+    } for url in urls]), 201
+
