@@ -9,7 +9,12 @@ users_bp = Blueprint("users", __name__)
 @users_bp.route("/users", methods = ["GET"])
 def list_users():
     users = User.select()
-    return jsonify([model_to_dict(u) for u in users])
+    return jsonify([{
+        "id": u.id,
+        "username": u.username,
+        "email": u.email,
+        "created_at": u.created_at,
+    } for u in users])
 
 @users_bp.route("/users/bulk", methods = ["POST"])
 def post_users():
