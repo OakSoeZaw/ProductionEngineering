@@ -1,0 +1,39 @@
+from flask import Blueprint, jsonify, request
+from playhouse.shortcuts import model_to_dict
+
+from app.models.url import Url
+from app.models.user import User
+from app.services.generateShortCode import generate_short_code
+
+urls_bp = Blueprint("urls", __name__)
+
+@urls_bp.route("/urls", methods=["POST"])
+def postUrl():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "need Json data"}), 400
+    userId = data.get("user_id")
+    user = User.get_or_none(User.id == userId)
+    if not user:
+        return jsonify({"error": "User not found"}), 400
+    originalUrl = data.get("original_url")
+    title = data.get("title")
+
+    shortUrl = generate_short_code()
+    url = Url.create(
+        user = user,
+        short_code = shortUrl,
+        original_url = originalUrl,
+        title = title,
+        is_active = True,
+    )
+    return jsonify({
+        "id": url.id,
+        "user_id": url.user.id,
+        "short_code": url.short_code,
+        "original_url": url.original_url,
+        "title": url.title,
+        "is_active": url.is_active,
+        "created_at": url.created_at.isoformat(),
+        "updated_at": url.updated_at.isoformat(),
+    }), 201
