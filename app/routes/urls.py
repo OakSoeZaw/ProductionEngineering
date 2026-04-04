@@ -4,7 +4,7 @@ from datetime import datetime
 
 from app.models.url import Url
 from app.models.user import User
-from app.modesl.event import Event
+from app.models.event import Event
 from app.services.generateShortCode import generate_short_code
 
 urls_bp = Blueprint("urls", __name__)
