@@ -34,3 +34,20 @@ def getUserByID(id: int):
     if user is None:
         return jsonify({"error": "User not found"}), 404
     return jsonify(model_to_dict(user))
+
+@users_bp.route("/users", methods=["POST"])
+def createUser():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No Json Provided"})
+    username = data.get("username")
+    email = data.get("email")
+
+    if not username or not email:
+        return jsonify({"error": "username and email are required"})
+
+    user = User.create(username= username, email= email)
+    return jsonify(
+        model_to_dict(user)
+    ), 201
+
