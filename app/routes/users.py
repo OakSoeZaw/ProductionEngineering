@@ -51,3 +51,20 @@ def createUser():
         model_to_dict(user)
     ), 201
 
+@users_bp.route("/users/<id>", methods=["PUT"])
+def updateUser(id: int):
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "New username needed"}), 400
+    
+    username = data.get("username")
+    if not username:
+        return jsonify({"error": "User not found"}), 400
+    try:
+        user = User.get_by_id(id)
+    except User.DoesNotExist:
+        return jsonify({"error": "User not found"}), 404
+    
+    user.username = username
+    user.save()
+    return jsonify(model_to_dict(user)), 200
