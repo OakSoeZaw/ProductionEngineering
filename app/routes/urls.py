@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, request
-from playhouse.shortcuts import model_to_dict
 from peewee import DoesNotExist
 from datetime import datetime
 
 from app.models.url import Url
 from app.models.user import User
+from app.modesl.event import Event
 from app.services.generateShortCode import generate_short_code
 
 urls_bp = Blueprint("urls", __name__)
@@ -29,6 +29,16 @@ def postUrl():
         title = title,
         is_active = True,
     )
+    Event.create(
+        url = url,
+        user = user,
+        event_type ="created",
+        details = {
+            "short_code" : url.short_code,
+            "original_url" : url.original_url 
+        }
+    )
+
     return jsonify({
         "id": url.id,
         "user_id": url.user.id,
@@ -52,13 +62,14 @@ def getUrl():
         "is_active": url.is_active,
         "created_at": url.created_at.isoformat(),
         "updated_at": url.updated_at.isoformat(),
-    } for url in urls]), 201
+    } for url in urls]), 200
 
 @urls_bp.route("/urls/<id>", methods=["GET"])
 def getUrlById(id : int):
-    url = Url.get_by_id(id)
-    if not url:
-        return jsonify({"error": "Id not found"}), 400
+    try:
+        url = Url.get_by_id(id)
+    except DoesNotExist:
+        return jsonify({"error": "Id not found"}), 404
     return jsonify({
         "id": url.id,
         "user_id": url.user.id,
@@ -86,6 +97,16 @@ def updateUrl(id: int):
     url.updated_at = datetime.now()
     url.save()
 
+    Event.create(
+        url = url,
+        user = url.user,
+        event_type = "updated",
+        details = {
+            "short-code" : url.short_code,
+            "original_url" : url.original_url
+        }
+    )
+
     return jsonify({
         "id": url.id,
         "user_id": url.user.id,
@@ -95,4 +116,4 @@ def updateUrl(id: int):
         "is_active": url.is_active,
         "created_at": url.created_at.isoformat(),
         "updated_at": url.updated_at.isoformat(),
-    }), 201
+    }), 200
