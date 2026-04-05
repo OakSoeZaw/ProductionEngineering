@@ -1,0 +1,16 @@
+name: Deployment
+on:
+  push:
+      branches: [main]
+jobs:
+    testing:
+      uses: ./.github/workflows/test.yml
+    deployment:
+      needs: testing
+      runs-on: ubuntu-latest
+      steps:
+        - name: checkout repo
+          uses: actions/checkout@v4
+        - name: deploy
+          run: echo "Deploying to production..."
+      
