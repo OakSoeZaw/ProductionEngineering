@@ -5,7 +5,7 @@ from app.models.url import Url
 
 def generate_short_code(length: int = 6) -> str:
     while True:
-        code = generate_random_code
+        code = generate_random_code(length)
         # Check no Url already has this short_code
         if not Url.select().where(Url.short_code == code).exists():
             return code

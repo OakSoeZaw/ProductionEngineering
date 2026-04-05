@@ -21,7 +21,7 @@ def postUrl():
     originalUrl = data.get("original_url")
     title = data.get("title")
 
-    shortUrl = generate_short_code("hi")
+    shortUrl = generate_short_code()
     url = Url.create(
         user = user,
         short_code = shortUrl,
