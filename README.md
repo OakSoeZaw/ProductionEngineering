@@ -190,3 +190,9 @@ query = (Product
 - Wrap bulk inserts in `db.atomic()` for transactional safety and performance.
 - The template uses `teardown_appcontext` for connection cleanup, so connections are closed even when requests fail.
 - Check `.env.example` for all available configuration options.
+
+
+Screenshot for deployment Blocked when Test Fail
+
+<img width="940" height="496" alt="Screenshot 2026-04-05 at 10 21 23 AM" src="https://github.com/user-attachments/assets/a5f4afab-04e5-473f-a4d1-ed94bede7aad" />
+
