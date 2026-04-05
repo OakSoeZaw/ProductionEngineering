@@ -21,6 +21,9 @@ def postUrl():
     originalUrl = data.get("original_url")
     title = data.get("title")
 
+    if not originalUrl or not title:
+        return jsonify({"error": "original_url and title are required"}), 400
+
     shortUrl = generate_short_code()
     url = Url.create(
         user = user,
@@ -52,7 +55,11 @@ def postUrl():
 
 @urls_bp.route("/urls", methods=["GET"])
 def getUrl():
-    
+    user_id = request.args.get("user_id", type=int)
+    if user_id:
+        urls = Url.select().where(Url.user == user_id)
+    else:
+        urls = Url.select()
     urls = Url.select()
     return jsonify([{
         "id": url.id,
