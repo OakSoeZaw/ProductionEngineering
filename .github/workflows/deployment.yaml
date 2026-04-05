@@ -4,7 +4,7 @@ on:
       branches: [main]
 jobs:
     testing:
-      uses: ./.github/workflows/test.yml
+      uses: ./.github/workflows/ci.yml
     deployment:
       needs: testing
       runs-on: ubuntu-latest
