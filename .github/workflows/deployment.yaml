@@ -5,6 +5,8 @@ on:
 jobs:
     testing:
       uses: ./.github/workflows/ci.yml
+      secrets:
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     deployment:
       needs: testing
       runs-on: ubuntu-latest
