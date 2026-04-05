@@ -29,7 +29,7 @@ def test_post_url_missing_user(client, db):
         "title": "Test URL"
     })
 
-    assert response.status_code == 400
+    assert response.status_code == 999
 
 def test_post_url_missing_body(client,db):
 
