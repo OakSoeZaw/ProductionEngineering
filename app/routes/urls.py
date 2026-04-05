@@ -13,7 +13,7 @@ urls_bp = Blueprint("urls", __name__)
 def postUrl():
     data = request.get_json()
     if not data:
-        return jsonify({"error": "need Json data"}), 400
+        return jsonify({"error": "need Json data"}), 415
     userId = data.get("user_id")
     user = User.get_or_none(User.id == userId)
     if not user:

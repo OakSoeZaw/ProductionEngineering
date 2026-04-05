@@ -21,3 +21,18 @@ def test_post_url_valid(client, db):
     data = response.get_json()
     assert data["original_url"] == "https://example.com"
     assert data["user_id"] == user.id
+
+def test_post_url_missing_user(client, db):
+
+    response = client.post("/urls", json={
+        "original_url": "https://example.com",
+        "title": "Test URL"
+    })
+
+    assert response.status_code == 400
+
+def test_post_url_missing_body(client,db):
+
+    response = client.post("/urls")
+
+    assert response.status_code == 415
