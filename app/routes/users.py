@@ -41,12 +41,18 @@ def getUserByID(id: int):
 def createUser():
     data = request.get_json()
     if not data:
-        return jsonify({"error": "No Json Provided"})
+        return jsonify({"error": "No Json Provided"}),400
     username = data.get("username")
     email = data.get("email")
 
     if not username or not email:
-        return jsonify({"error": "username and email are required"})
+        return jsonify({"error": "username and email are required"}), 400
+
+    if not isinstance(username, str):
+        return jsonify({"error": "Can't have integer as Username"}),422
+    
+    if not isinstance(email, str):
+        return jsonify({"error": "email must be a string"}), 422
 
     user = User.create(username= username, email= email)
     return jsonify(
