@@ -196,3 +196,8 @@ Screenshot for deployment Blocked when Test Fail
 
 <img width="940" height="496" alt="Screenshot 2026-04-05 at 10 21 23 AM" src="https://github.com/user-attachments/assets/a5f4afab-04e5-473f-a4d1-ed94bede7aad" />
 
+
+Dealing with 404 error and 500 error
+
+Json response is returned with the error message inside the app
+
