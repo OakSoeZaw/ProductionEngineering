@@ -8,7 +8,9 @@ users_bp = Blueprint("users", __name__)
 
 @users_bp.route("/users", methods = ["GET"])
 def list_users():
-    users = User.select()
+    page = request.args.get("page",1, type = int)
+    per_page = request.args.get("per_page", 10, type = int)
+    users = User.select().paginate(page,per_page)
     return jsonify([{
         "id": u.id,
         "username": u.username,

@@ -52,6 +52,7 @@ def postUrl():
 
 @urls_bp.route("/urls", methods=["GET"])
 def getUrl():
+    
     urls = Url.select()
     return jsonify([{
         "id": url.id,
